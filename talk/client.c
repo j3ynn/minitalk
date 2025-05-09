@@ -6,7 +6,7 @@
 /*   By: jbellucc <jbellucc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:05:05 by jbellucc          #+#    #+#             */
-/*   Updated: 2025/04/17 16:38:27 by jbellucc         ###   ########.fr       */
+/*   Updated: 2025/05/09 14:22:19 by jbellucc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	atoi(const char *str)
 	while ((str[p] >= 48) && (str[p] <= 57))
 	{
 		ris = ris * 10 + (str[p] - 48);
-		p ++;
+		p++;
 	}
 	return (sign * ris);
 }
@@ -50,10 +50,49 @@ void	dectobin(int n, int *bin)
 			bin[7 - i] = 1;
 		else
 			bin[7 - i] = 0;
-		i --;
+		i--;
 	}
 }
 
-int	main(int argc, char **argv)
+void	send_char(pid_t pid, char c)
 {
+	int bin[8];
+	int	i;
+	
+	i = 0;
+	dectobin(c, bin);
+	while (i < 8)
+	{
+		if (bin[i] == 1)
+			kill(pid, SIGUSR1);
+		else
+			kill(pid, SIGUSR2);
+		usleep(100);
+		i++;
+	}
+}
+
+int	main(int ac, char **av)
+{
+	pid_t	s_pid;
+
+	if (ac != 3)
+	{
+		ft_printf("numero di argomenti non valido!\n");
+		ft_printf("fornire il PID del server e il messaggio\n");
+		exit(EXIT_FAILURE);
+	}
+	s_pid = atoi(av[1]);
+	if (s_pid <= 0)
+	{
+		ft_printf("Error: invalid server PID\n");
+		exit(EXIT_FAILURE);
+	}
+	while (*av[2])
+	{
+		send_char(s_pid, *av[2]);
+		av[2]++;
+	}
+	send_char(s_pid, *av[2]);
+	return (0);
 }

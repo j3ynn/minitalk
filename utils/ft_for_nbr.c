@@ -6,11 +6,11 @@
 /*   By: jbellucc <jbellucc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 14:45:07 by jbellucc          #+#    #+#             */
-/*   Updated: 2025/04/14 14:31:51 by jbellucc         ###   ########.fr       */
+/*   Updated: 2025/05/08 20:19:09 by jbellucc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "utils.h"
+#include "../minitalk.h"
 
 int	ft_strlen(char *str)
 {

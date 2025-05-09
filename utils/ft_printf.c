@@ -6,11 +6,11 @@
 /*   By: jbellucc <jbellucc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 14:42:12 by jbellucc          #+#    #+#             */
-/*   Updated: 2025/04/14 14:31:56 by jbellucc         ###   ########.fr       */
+/*   Updated: 2025/05/08 20:19:05 by jbellucc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "utils.h"
+#include "../minitalk.h"
 
 void	ft_putptr(void *ptr, int *count)
 {
