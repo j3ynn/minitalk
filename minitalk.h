@@ -6,7 +6,7 @@
 /*   By: jbellucc <jbellucc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 14:47:54 by jbellucc          #+#    #+#             */
-/*   Updated: 2025/05/09 17:57:08 by jbellucc         ###   ########.fr       */
+/*   Updated: 2025/05/10 17:57:57 by jbellucc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 # include <stdarg.h>
 # include <stdint.h>
 
+unsigned char bintodec(int *bin);
+
 void	ft_putnbr_base2(unsigned long long n, char *base, int *count);
 void	ft_putnbr_base(long long n, char *base, int *count);
 void	ft_putchr(char j, int *count);
@@ -29,9 +31,11 @@ void	ft_putptr(void *ptr, int *count);
 void	ft_format(va_list args, const char frm, int *count);
 void	dectobin(int n, int *bin);
 void	send_char(pid_t pid, char c);
+void	signal_handler(int sig, siginfo_t *info, void *context);
 
 int		ft_printf(const char *s, ...);
 int		ft_strlen(char *str);
 int     atoi(const char *str);
+int		convert_char(unsigned char c, int *pos, pid_t client_pid);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: jbellucc <jbellucc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 14:21:47 by jbellucc          #+#    #+#             */
-/*   Updated: 2025/05/09 18:01:27 by jbellucc         ###   ########.fr       */
+/*   Updated: 2025/05/10 18:06:51 by jbellucc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,10 @@ int convert_char(unsigned char c, int *pos, pid_t client_pid)
 
 void signal_handler(int sig, siginfo_t *info, void *context)
 {
-    int             pos = 0;
-    unsigned char   res = 0;
-    int             bin[8];
-    pid_t           client_id;
+    static int          pos;
+    static unsigned char bin[8];
+    static pid_t        client_id;
+    unsigned char       res;
     (void)context;
     
     if (info->si_pid)
@@ -65,4 +65,29 @@ void signal_handler(int sig, siginfo_t *info, void *context)
             return;
     }
     kill(client_id, SIGUSR1);
+}
+//da rifare meglio
+int main(void)
+{
+    struct sigaction sa;
+    pid_t server_pid;
+    
+    server_pid = getpid();
+    ft_printf("Server PID: %d\n", server_pid);
+    ft_printf("In attesa di messaggi...\n");
+    
+    sa.sa_flags = SA_SIGINFO;
+    sa.sa_sigaction = signal_handler;
+    sigemptyset(&sa.sa_mask);
+    
+    if (sigaction(SIGUSR1, &sa, NULL) == -1 || sigaction(SIGUSR2, &sa, NULL) == -1)
+    {
+        ft_printf("Errore nella configurazione dei segnali\n");
+        return (1);
+    }
+    
+    while (1)
+        pause();
+    
+    return (0);
 }
