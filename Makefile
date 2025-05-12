@@ -1,8 +1,8 @@
 NAME_CLIENT = client
-# NAME_SERVER = server
+NAME_SERVER = server
 
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror 
 
 INC_DIR = ./
 SRC_DIR = ./talk/

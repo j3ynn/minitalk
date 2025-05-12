@@ -6,11 +6,13 @@
 /*   By: jbellucc <jbellucc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:05:05 by jbellucc          #+#    #+#             */
-/*   Updated: 2025/05/09 14:22:19 by jbellucc         ###   ########.fr       */
+/*   Updated: 2025/05/12 19:53:36 by jbellucc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minitalk.h"
+
+int		g_received = 0;
 
 int	atoi(const char *str)
 {
@@ -54,6 +56,17 @@ void	dectobin(int n, int *bin)
 	}
 }
 
+void	ssignal_handler(int sig)
+{
+	if (sig == SIGUSR1)
+		g_received = 1;
+	else if (sig == SIGUSR2)
+	{
+		ft_printf("Messaggio ricevuto con successo dal server!\n");
+		exit(EXIT_SUCCESS);
+	}	
+}
+
 void	send_char(pid_t pid, char c)
 {
 	int bin[8];
@@ -63,11 +76,13 @@ void	send_char(pid_t pid, char c)
 	dectobin(c, bin);
 	while (i < 8)
 	{
+		g_received = 0;
 		if (bin[i] == 1)
 			kill(pid, SIGUSR1);
 		else
 			kill(pid, SIGUSR2);
-		usleep(100);
+		while (!g_received)
+			usleep(50);
 		i++;
 	}
 }
@@ -75,13 +90,15 @@ void	send_char(pid_t pid, char c)
 int	main(int ac, char **av)
 {
 	pid_t	s_pid;
+	struct sigaction sa;
 
 	if (ac != 3)
-	{
-		ft_printf("numero di argomenti non valido!\n");
-		ft_printf("fornire il PID del server e il messaggio\n");
 		exit(EXIT_FAILURE);
-	}
+	sa.sa_handler = ssignal_handler;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = 0;
+	sigaction(SIGUSR1, &sa, NULL);
+	sigaction(SIGUSR2, &sa, NULL);
 	s_pid = atoi(av[1]);
 	if (s_pid <= 0)
 	{
@@ -94,5 +111,6 @@ int	main(int ac, char **av)
 		av[2]++;
 	}
 	send_char(s_pid, *av[2]);
+	usleep(500000);
 	return (0);
 }
